@@ -30,7 +30,7 @@ import com.devonfw.quarkus.productmanagement.service.v1.model.ProductSearchCrite
 
 //In Quarkus all JAX-RS resources are treated as CDI beans
 //default is Singleton scope
-@Path("/products")
+@Path("/product")
 // how we serialize response
 @Produces(MediaType.APPLICATION_JSON)
 // how we deserialize params
@@ -61,35 +61,35 @@ public class ProductRestService {
   }
 
   @GET
-  @Path("criteriaApi")
-  public PageImpl<ProductDto> getAllCriteriaApi(@BeanParam ProductSearchCriteriaDto dto) {
+  @Path("search")
+  public PageImpl<ProductDto> getProductsByCriteriaApi(@BeanParam ProductSearchCriteriaDto dto) {
 
     return (PageImpl) this.ucFindProduct.findProductsByCriteriaApi(dto);
   }
 
-  @GET
-  @Path("queryDsl")
-  public PageImpl<ProductDto> getAllQueryDsl(@BeanParam ProductSearchCriteriaDto dto) {
+  @POST
+  @Path("search")
+  public PageImpl<ProductDto> getProductsByQueryDsl(@BeanParam ProductSearchCriteriaDto dto) {
 
     return (PageImpl) this.ucFindProduct.findProductsByQueryDsl(dto);
   }
 
   @GET
-  @Path("query")
-  public PageImpl<ProductDto> getAllQuery(@BeanParam ProductSearchCriteriaDto dto) {
+  @Path("searchbytitle")
+  public PageImpl<ProductDto> getProductsByTitleQuery(@BeanParam ProductSearchCriteriaDto dto) {
 
     return (PageImpl) this.ucFindProduct.findProductsByTitleQuery(dto);
   }
 
-  @GET
-  @Path("nativeQuery")
+  @POST
+  @Path("searchbytitle")
   public PageImpl<ProductDto> getAllNativeQuery(@BeanParam ProductSearchCriteriaDto dto) {
 
     return (PageImpl) this.ucFindProduct.findProductsByTitleNativeQuery(dto);
   }
 
   @GET
-  @Path("ordered")
+  @Path("searchall")
   public PageImpl<ProductDto> getAllOrderedByTitle() {
 
     return (PageImpl) this.ucFindProduct.findProductsOrderedByTitle();

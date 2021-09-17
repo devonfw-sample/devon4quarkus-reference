@@ -39,7 +39,7 @@ Our tests are now real integration tests with real postgres DB, and are stuitabl
 
 ## Access your REST endpoint
 
-Go to http://localhost:8080/animals
+Go to http://localhost:8080/
 
 
 ## OpenAPI & Swagger UI
