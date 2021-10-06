@@ -22,6 +22,7 @@ public abstract class ApplicationPersistenceEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Version
   private Integer modificationCounter;
 
   /**
@@ -42,7 +43,6 @@ public abstract class ApplicationPersistenceEntity {
     this.id = id;
   }
 
-  @Version
   public Integer getModificationCounter() {
 
     return this.modificationCounter;
