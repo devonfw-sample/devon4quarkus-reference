@@ -19,9 +19,10 @@ public abstract class ApplicationPersistenceEntity {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Version
   private Integer modificationCounter;
 
   /**
@@ -42,7 +43,6 @@ public abstract class ApplicationPersistenceEntity {
     this.id = id;
   }
 
-  @Version
   public Integer getModificationCounter() {
 
     return this.modificationCounter;

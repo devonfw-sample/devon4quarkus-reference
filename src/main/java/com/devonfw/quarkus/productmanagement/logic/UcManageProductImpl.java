@@ -4,6 +4,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.devonfw.quarkus.general.service.exception.InvalidParameterException;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
 import com.devonfw.quarkus.productmanagement.service.v1.mapper.ProductMapper;
@@ -27,14 +30,12 @@ public class UcManageProductImpl implements UcManageProduct {
   }
 
   @Override
-  public ProductDto deleteProduct(String id) {
+  public void deleteProduct(String id) {
 
-    ProductEntity product = this.productRepository.findById(Long.valueOf(id)).get();
-    if (product != null) {
-      this.productRepository.delete(product);
-      return this.mapper.map(product);
-    } else {
-      return null;
+    if (!StringUtils.isNumeric(id)) {
+      throw new InvalidParameterException("Unable to parse ID: " + id);
     }
+
+    this.productRepository.deleteById(Long.valueOf(id));
   }
 }

@@ -1,6 +1,7 @@
 package com.devonfw.quarkus.productmanagement.service.v1;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -103,7 +104,7 @@ public class ProductRestService {
   @POST
   // We did not define custom @Path - so it will use class level path.
   // Although we now have 2 methods with same path, it is ok, because it is a different method (get vs post)
-  public ProductDto createNewProduct(NewProductDto dto) {
+  public ProductDto createNewProduct(@Valid NewProductDto dto) {
 
     return this.ucManageProduct.saveProduct(dto);
   }
@@ -132,9 +133,9 @@ public class ProductRestService {
   @Operation(operationId = "deleteProductById", description = "Deletes the Product with given id")
   @DELETE
   @Path("{id}")
-  public ProductDto deleteProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
+  public void deleteProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
 
-    return this.ucManageProduct.deleteProduct(id);
+    this.ucManageProduct.deleteProduct(id);
   }
 
   private static class PagedProductResponse extends PageResultDTO<ProductDto> {

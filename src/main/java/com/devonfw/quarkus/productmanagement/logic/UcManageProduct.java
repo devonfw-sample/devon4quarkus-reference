@@ -6,5 +6,5 @@ import com.devonfw.quarkus.productmanagement.service.v1.model.ProductDto;
 public interface UcManageProduct {
   ProductDto saveProduct(NewProductDto dto);
 
-  ProductDto deleteProduct(String id);
+  void deleteProduct(String id);
 }

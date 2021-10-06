@@ -2,15 +2,18 @@ package com.devonfw.quarkus.productmanagement.logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import com.devonfw.quarkus.general.service.exception.InvalidParameterException;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
 import com.devonfw.quarkus.productmanagement.service.v1.mapper.ProductMapper;
@@ -24,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UcFindProductImpl implements UcFindProduct {
   @Inject
-  ProductRepository ProductRepository;
+  ProductRepository productRepository;
 
   @Inject
   ProductMapper mapper;
@@ -32,7 +35,7 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public Page<ProductDto> findProducts(ProductSearchCriteriaDto dto) {
 
-    Iterable<ProductEntity> productsIterator = this.ProductRepository.findAll();
+    Iterable<ProductEntity> productsIterator = this.productRepository.findAll();
     List<ProductEntity> products = new ArrayList<ProductEntity>();
     productsIterator.forEach(products::add);
     List<ProductDto> productsDto = this.mapper.map(products);
@@ -42,7 +45,7 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public Page<ProductDto> findProductsByCriteriaApi(ProductSearchCriteriaDto dto) {
 
-    List<ProductEntity> products = this.ProductRepository.findAllCriteriaApi(dto).getContent();
+    List<ProductEntity> products = this.productRepository.findAllCriteriaApi(dto).getContent();
     List<ProductDto> productsDto = this.mapper.map(products);
     return new PageImpl<>(productsDto, PageRequest.of(dto.getPageNumber(), dto.getPageSize()), productsDto.size());
   }
@@ -50,7 +53,7 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public Page<ProductDto> findProductsByQueryDsl(ProductSearchCriteriaDto dto) {
 
-    List<ProductEntity> products = this.ProductRepository.findAllQueryDsl(dto).getContent();
+    List<ProductEntity> products = this.productRepository.findAllQueryDsl(dto).getContent();
     List<ProductDto> productsDto = this.mapper.map(products);
     return new PageImpl<>(productsDto, PageRequest.of(dto.getPageNumber(), dto.getPageSize()), productsDto.size());
   }
@@ -58,7 +61,7 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public Page<ProductDto> findProductsByTitleQuery(ProductSearchCriteriaDto dto) {
 
-    List<ProductEntity> products = this.ProductRepository.findByTitleQuery(dto).getContent();
+    List<ProductEntity> products = this.productRepository.findByTitleQuery(dto).getContent();
     List<ProductDto> productsDto = this.mapper.map(products);
     return new PageImpl<>(productsDto, PageRequest.of(dto.getPageNumber(), dto.getPageSize()), productsDto.size());
   }
@@ -66,7 +69,7 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public Page<ProductDto> findProductsByTitleNativeQuery(ProductSearchCriteriaDto dto) {
 
-    List<ProductEntity> products = this.ProductRepository.findByTitleNativeQuery(dto).getContent();
+    List<ProductEntity> products = this.productRepository.findByTitleNativeQuery(dto).getContent();
     List<ProductDto> productsDto = this.mapper.map(products);
     return new PageImpl<>(productsDto, PageRequest.of(dto.getPageNumber(), dto.getPageSize()), productsDto.size());
   }
@@ -74,7 +77,7 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public Page<ProductDto> findProductsOrderedByTitle() {
 
-    List<ProductEntity> products = this.ProductRepository.findAllByOrderByTitle().getContent();
+    List<ProductEntity> products = this.productRepository.findAllByOrderByTitle().getContent();
     List<ProductDto> productsDto = this.mapper.map(products);
     return new PageImpl<>(productsDto);
   }
@@ -82,7 +85,11 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public ProductDto findProduct(String id) {
 
-    ProductEntity product = this.ProductRepository.findById(Long.valueOf(id)).get();
+    if (!StringUtils.isNumeric(id)) {
+      throw new InvalidParameterException("Unable to parse ID: " + id);
+    }
+
+    ProductEntity product = this.productRepository.findById(Long.valueOf(id)).get();
     if (product != null) {
       return this.mapper.map(product);
     } else {
@@ -93,9 +100,9 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public ProductDto findProductByTitle(String title) {
 
-    ProductEntity product = this.ProductRepository.findByTitle(title);
-    if (product != null) {
-      return this.mapper.map(product);
+    Optional<ProductEntity> product = this.productRepository.findByTitle(title);
+    if (product.isPresent()) {
+      return this.mapper.map(product.get());
     } else {
       return null;
     }
