@@ -44,8 +44,15 @@ class ProductRestServiceTest {// extends AbstractTest {
   @Test
   void getNonExistingTest() {
 
-    Response response = given().when().contentType(MediaType.APPLICATION_JSON).get("/products/doesnoexist").then().log()
-        .all().statusCode(500).extract().response();
+    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/0").then().log().all().statusCode(204)
+        .extract().response();
+  }
+
+  @Test
+  void businessExceptionTest() {
+
+    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/doesnotexist").then().log().all()
+        .statusCode(400).extract().response();
   }
 
   @Test
@@ -85,12 +92,13 @@ class ProductRestServiceTest {// extends AbstractTest {
   public void deleteById() {
 
     // delete
-    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(200)
-        .body("title", equalTo("MacBook Pro"));
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(204);
 
     // after deletion it should be deleted
-    given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(500);
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(204);
 
+    // delete again should fail
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(500);
   }
 
 }

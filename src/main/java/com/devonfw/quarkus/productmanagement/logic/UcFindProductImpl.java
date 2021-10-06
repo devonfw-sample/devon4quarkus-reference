@@ -89,9 +89,9 @@ public class UcFindProductImpl implements UcFindProduct {
       throw new InvalidParameterException("Unable to parse ID: " + id);
     }
 
-    ProductEntity product = this.productRepository.findById(Long.valueOf(id)).get();
-    if (product != null) {
-      return this.mapper.map(product);
+    Optional<ProductEntity> product = this.productRepository.findById(Long.valueOf(id));
+    if (product.isPresent()) {
+      return this.mapper.map(product.get());
     } else {
       return null;
     }
