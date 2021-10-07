@@ -82,8 +82,6 @@ public class RestServiceExceptionFacade implements ExceptionMapper<Throwable> {
   @Override
   public Response toResponse(Throwable exception) {
 
-    System.out.println("SANDESH SANDESH SANDESH ");
-    LOG.info("SANDESH SANDESH SANDESH SANDESH SANDESH");
     if (exception instanceof WebApplicationException) {
       return createResponse((WebApplicationException) exception);
     } else if (exception instanceof NlsRuntimeException) {
