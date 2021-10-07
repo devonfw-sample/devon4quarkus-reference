@@ -22,6 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.springframework.data.domain.Page;
 import org.tkit.quarkus.rs.models.PageResultDTO;
 
+import com.devonfw.quarkus.exceptionutils.ProductNotFoundException;
 import com.devonfw.quarkus.productmanagement.logic.UcFindProduct;
 import com.devonfw.quarkus.productmanagement.logic.UcManageProduct;
 import com.devonfw.quarkus.productmanagement.service.v1.model.NewProductDto;
@@ -113,9 +114,13 @@ public class ProductRestService {
   @APIResponse(responseCode = "404", description = "Product not found"), @APIResponse(responseCode = "500") })
   @Operation(operationId = "getProductById", description = "Returns Product with given id")
   @GET
-  @Path("{id}")
+  @Path("/id/{id}")
   public ProductDto getProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
 
+    // A sample scenario to simulate exception mapping
+    if (Integer.parseInt(id) > 100) {
+      throw new ProductNotFoundException("Products not found!!");
+    }
     return this.ucFindProduct.findProduct(id);
   }
 
