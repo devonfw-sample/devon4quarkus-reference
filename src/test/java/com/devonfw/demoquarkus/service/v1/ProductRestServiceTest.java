@@ -98,7 +98,7 @@ class ProductRestServiceTest {// extends AbstractTest {
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(404);
 
     // delete again should fail
-    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(500);
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(404);
   }
 
 }

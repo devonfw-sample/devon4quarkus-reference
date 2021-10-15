@@ -3,6 +3,7 @@ package com.devonfw.quarkus.productmanagement.logic;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 
 import com.devonfw.quarkus.general.service.exception.InvalidParameterException;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
@@ -34,6 +35,8 @@ public class UcManageProductImpl implements UcManageProduct {
       this.productRepository.deleteById(Long.valueOf(id));
     } catch (NumberFormatException e) {
       throw new InvalidParameterException("Unable to parse ID: " + id);
+    } catch (IllegalArgumentException e) {
+      throw new NotFoundException();
     }
   }
 }

@@ -129,7 +129,7 @@ public class ProductRestService {
 
   @APIResponses({
   @APIResponse(responseCode = "204", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
-  @APIResponse(responseCode = "500", description = "Product not found"), @APIResponse(responseCode = "500") })
+  @APIResponse(responseCode = "404", description = "Product not found"), @APIResponse(responseCode = "500") })
   @Operation(operationId = "deleteProductById", description = "Deletes the Product with given id")
   @DELETE
   @Path("{id}")
