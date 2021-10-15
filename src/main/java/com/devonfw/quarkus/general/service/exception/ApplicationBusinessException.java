@@ -21,4 +21,14 @@ public abstract class ApplicationBusinessException extends RuntimeException {
 
     return false;
   }
+
+  public String getCode() {
+
+    return getClass().getSimpleName();
+  }
+
+  public Integer getStatusCode() {
+
+    return null;
+  }
 }

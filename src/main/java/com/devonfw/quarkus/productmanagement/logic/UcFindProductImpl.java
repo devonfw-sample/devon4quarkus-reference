@@ -7,8 +7,8 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -85,15 +85,15 @@ public class UcFindProductImpl implements UcFindProduct {
   @Override
   public ProductDto findProduct(String id) {
 
-    if (!StringUtils.isNumeric(id)) {
+    try {
+      Optional<ProductEntity> product = this.productRepository.findById(Long.valueOf(id));
+      if (product.isPresent()) {
+        return this.mapper.map(product.get());
+      } else {
+        throw new NotFoundException();
+      }
+    } catch (NumberFormatException e) {
       throw new InvalidParameterException("Unable to parse ID: " + id);
-    }
-
-    Optional<ProductEntity> product = this.productRepository.findById(Long.valueOf(id));
-    if (product.isPresent()) {
-      return this.mapper.map(product.get());
-    } else {
-      return null;
     }
   }
 
@@ -104,7 +104,7 @@ public class UcFindProductImpl implements UcFindProduct {
     if (product.isPresent()) {
       return this.mapper.map(product.get());
     } else {
-      return null;
+      throw new NotFoundException();
     }
   }
 }

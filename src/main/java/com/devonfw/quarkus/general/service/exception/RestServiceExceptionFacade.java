@@ -32,33 +32,35 @@ public class RestServiceExceptionFacade implements ExceptionMapper<RuntimeExcept
 
     if (exception instanceof ApplicationBusinessException) {
       return createResponse((ApplicationBusinessException) exception);
-    }
-    if (exception instanceof WebApplicationException) {
+    } else if (exception instanceof WebApplicationException) {
       return createResponse((WebApplicationException) exception);
     }
+
     return createResponse(exception);
   }
 
   private Response createResponse(ApplicationBusinessException exception) {
 
-    return createResponse(Status.BAD_REQUEST, Error.APPLICATION_BUSINESS_EXCEPTION, exception);
+    int status = exception.getStatusCode() == null ? Status.BAD_REQUEST.getStatusCode() : exception.getStatusCode();
+    return createResponse(status, exception.getCode(), exception);
   }
 
   private Response createResponse(WebApplicationException exception) {
 
     Status status = Status.fromStatusCode(exception.getResponse().getStatus());
-    return createResponse(status, Error.WEB_APPLICATION_EXCEPTION, exception);
+    return createResponse(status.getStatusCode(), exception.getClass().getSimpleName(), exception);
   }
 
   private Response createResponse(Exception exception) {
 
-    return createResponse(Status.INTERNAL_SERVER_ERROR, Error.UNDEFINED_ERROR_CODE, exception);
+    return createResponse(Status.INTERNAL_SERVER_ERROR.getStatusCode(), exception.getClass().getSimpleName(),
+        exception);
   }
 
-  private Response createResponse(Status status, Error errorCode, Exception exception) {
+  private Response createResponse(int status, String errorCode, Exception exception) {
 
     Map<String, Object> jsonMap = new HashMap<>();
-    jsonMap.put("errorCode", errorCode.name());
+    jsonMap.put("errorCode", errorCode);
     if (this.exposeInternalErrorDetails) {
       jsonMap.put("message", getExposedErrorDetails(exception));
     } else {
@@ -83,11 +85,6 @@ public class RestServiceExceptionFacade implements ExceptionMapper<RuntimeExcept
       e = e.getCause();
     }
     return buffer.toString();
-  }
-
-  public enum Error {
-
-    APPLICATION_BUSINESS_EXCEPTION, WEB_APPLICATION_EXCEPTION, UNDEFINED_ERROR_CODE;
   }
 
 }

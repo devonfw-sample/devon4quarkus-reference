@@ -44,7 +44,7 @@ class ProductRestServiceTest {// extends AbstractTest {
   @Test
   void getNonExistingTest() {
 
-    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/0").then().log().all().statusCode(204)
+    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/0").then().log().all().statusCode(404)
         .extract().response();
   }
 
@@ -52,7 +52,7 @@ class ProductRestServiceTest {// extends AbstractTest {
   void businessExceptionTest() {
 
     given().when().contentType(MediaType.APPLICATION_JSON).get("/products/doesnotexist").then().log().all()
-        .statusCode(400).extract().response();
+        .statusCode(422).extract().response();
   }
 
   @Test
@@ -95,7 +95,7 @@ class ProductRestServiceTest {// extends AbstractTest {
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(204);
 
     // after deletion it should be deleted
-    given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(204);
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(404);
 
     // delete again should fail
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(500);

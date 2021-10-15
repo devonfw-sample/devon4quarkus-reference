@@ -4,8 +4,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.devonfw.quarkus.general.service.exception.InvalidParameterException;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
@@ -32,10 +30,10 @@ public class UcManageProductImpl implements UcManageProduct {
   @Override
   public void deleteProduct(String id) {
 
-    if (!StringUtils.isNumeric(id)) {
+    try {
+      this.productRepository.deleteById(Long.valueOf(id));
+    } catch (NumberFormatException e) {
       throw new InvalidParameterException("Unable to parse ID: " + id);
     }
-
-    this.productRepository.deleteById(Long.valueOf(id));
   }
 }

@@ -11,4 +11,10 @@ public class InvalidParameterException extends ApplicationBusinessException {
 
     super(message);
   }
+
+  @Override
+  public Integer getStatusCode() {
+
+    return Integer.valueOf(422);
+  }
 }

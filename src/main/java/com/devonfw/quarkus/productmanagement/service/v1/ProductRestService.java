@@ -111,7 +111,7 @@ public class ProductRestService {
 
   @APIResponses({
   @APIResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
-  @APIResponse(responseCode = "204", description = "Product not found"), @APIResponse(responseCode = "500") })
+  @APIResponse(responseCode = "404", description = "Product not found"), @APIResponse(responseCode = "500") })
   @Operation(operationId = "getProductById", description = "Returns Product with given id")
   @GET
   @Path("{id}")
