@@ -97,7 +97,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
     </dependency>
-    
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-jpamodelgen</artifactId>
@@ -106,7 +105,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-spring-data-jpa</artifactId>
     </dependency>
-	
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
@@ -238,8 +236,6 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
-      
-    
 	  <plugin>
         <groupId>com.mysema.maven</groupId>
         <artifactId>apt-maven-plugin</artifactId>
@@ -288,6 +284,33 @@
                 </configuration>
               </execution>
             </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>servicedocgen-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <descriptor>
+                <info>
+                  <title>Service Documentation</title>
+                  <description>This is api docs for devon4reference.</description>
+                </info>
+                <host>devon4quarkus.referenceapp.com</host>
+                <port>8443</port>
+                <basePath>myapp/services/rest</basePath>
+                <schemes>
+                  <scheme>https</scheme>
+                </schemes>
+                <javadocUrl>https://devon4quarkus.referenceapp.com/apidocs</javadocUrl>
+              </descriptor>
+            </configuration>
           </plugin>
         </plugins>
       </build>
