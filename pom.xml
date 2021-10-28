@@ -285,6 +285,7 @@
               </execution>
             </executions>
           </plugin>
+          <!-- Refer http://www.mojohaus.org/servicedocgen-maven-plugin/ for more information regarding usage and documentation generation. -->
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>servicedocgen-maven-plugin</artifactId>
@@ -299,16 +300,16 @@
             <configuration>
               <descriptor>
                 <info>
-                  <title>Service Documentation</title>
-                  <description>This is api docs for devon4reference.</description>
+                  <title>Product Service REST API Documentation</title>
+                  <description>This documentation describes the REST API of the product service with all its operations in detail.</description>
                 </info>
-                <host>devon4quarkus.referenceapp.com</host>
+                <!-- This is a placeholder for your service URL. Ex:devon4quarkus.referenceapp.com -->
+                <host></host>
                 <port>8443</port>
-                <basePath>myapp/services/rest</basePath>
+                <basePath>product/services/rest</basePath>
                 <schemes>
                   <scheme>https</scheme>
                 </schemes>
-                <javadocUrl>https://devon4quarkus.referenceapp.com/apidocs</javadocUrl>
               </descriptor>
             </configuration>
           </plugin>
