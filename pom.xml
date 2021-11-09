@@ -102,7 +102,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-jpamodelgen</artifactId>
@@ -111,7 +110,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-spring-data-jpa</artifactId>
     </dependency>
-
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
@@ -244,8 +242,7 @@
         </configuration>
       </plugin>
 
-
-	  <plugin>
+	    <plugin>
         <groupId>com.mysema.maven</groupId>
         <artifactId>apt-maven-plugin</artifactId>
         <version>1.1.3</version>
@@ -292,6 +289,34 @@
                 </configuration>
               </execution>
             </executions>
+          </plugin>
+          <!-- Refer http://www.mojohaus.org/servicedocgen-maven-plugin/ for more information regarding usage and documentation generation. -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>servicedocgen-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <descriptor>
+                <info>
+                  <title>Product Service REST API Documentation</title>
+                  <description>This documentation describes the REST API of the product service with all its operations in detail.</description>
+                </info>
+                <!-- This is a placeholder for your service URL. Ex:devon4quarkus.referenceapp.com -->
+                <host></host>
+                <port>8443</port>
+                <basePath>product/services/rest</basePath>
+                <schemes>
+                  <scheme>https</scheme>
+                </schemes>
+              </descriptor>
+            </configuration>
           </plugin>
         </plugins>
       </build>
