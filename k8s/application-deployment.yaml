@@ -1,18 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
-# deployment v1
 metadata:
-  # metadata labels - tags under which this resources can be found in k8s api
   labels:
     app: demo-quarkus
     app.kubernetes.io/name: demo-quarkus
   name: demo-quarkus
-  namespace: default
 spec:
   # scale to 2 instances
   replicas: 2
   selector:
-    #how are the pods linked together
     matchLabels:
       app: demo-quarkus
   template:
@@ -20,14 +16,11 @@ spec:
       labels:
         app: demo-quarkus
     spec:
-      # pod spec, we want a single container in our pods
       containers:
         - name: demo-quarkus
-          # where should the image come from
-          image: 'k3d-registry:5000/demo-quarkus:latest'
-          # always perform pull when creating pod
+          ## TODO: Insert the registry from which you want to pull the image
+          image: 'your-registry/demo-quarkus:latest'
           imagePullPolicy: Always
-          # env vars so we can connect to DB
           env:
             - name: QUARKUS_DATASOURCE_JDBC_URL
               value: jdbc:postgresql://postgresql:5432/demo
@@ -35,7 +28,6 @@ spec:
               value: demo
             - name: QUARKUS_DATASOURCE_PASSWORD
               value: demo
-          # live & ready probes, using our healthcheck endpoints
           livenessProbe:
             failureThreshold: 5
             httpGet:

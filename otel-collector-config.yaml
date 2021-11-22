@@ -8,16 +8,6 @@ receivers:
         - https://*
 
 exporters:
-  prometheus:
-    endpoint: "0.0.0.0:8889"
-    namespace: promexample
-    const_labels:
-      label1: value1
-
-  zipkin:
-    endpoint: "http://zipkin-all-in-one:9411/api/v2/spans"
-    format: proto
-
   jaeger:
     endpoint: jaeger-all-in-one:14250
     insecure: true
@@ -29,10 +19,6 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [zipkin, jaeger]
+      exporters: [jaeger]
       processors: [batch]
-    metrics:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [prometheus]
     

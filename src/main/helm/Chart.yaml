@@ -1,0 +1,11 @@
+apiVersion: v3
+name: demo-quarkus
+version: 1.0.0
+description: Helm chart for the devon4j Quarkus reference application
+appVersion: 1.0.0
+keywords:
+  - devon4j
+  - demo
+  - quarkus
+maintainers:
+  - name: devon4j Developer

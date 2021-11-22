@@ -1,10 +1,7 @@
-# a simple ingress for our service
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: demo-quarkus
-  annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
     - http:
@@ -15,6 +12,5 @@ spec:
               service:
                 name: demo-quarkus
                 port:
-                  number: {{ .Values.service.port }}
-      # this will work if you have dnsmasq(tkit env guide)
+                  number: {{ .Values.application.service.port }}
       host: {{ .Values.ingress.host }}

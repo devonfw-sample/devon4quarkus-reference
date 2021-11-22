@@ -1,0 +1,86 @@
+:toc: macro
+toc::[]
+
+= OpenTelemetry deployment
+
+Quarkus applications can easily use OpenTelemetry to collect information about traces and metrics.
+This guide describes how to set up the application to support OpenTelemetry for exporting and visualizing traces and spans with tools such as Jaeger, VictoriaMetrics, and Grafana.
+
+For this setup you need a Kubernetes cluster, an installation of Helm and a local Docker registry.
+
+== Preparation of the application
+
+First, you need to create the application and Docker image. Use the following commands to package the application, create the Docker image, and push it to your local Docker registry.
+
+[shell]
+----
+mvn clean package
+
+docker build src/main/docker/Dockerfile.jvm . -t demo-quarkus
+docker tag demo-quarkus name-of-your-registry/demo-quarkus
+docker push name-of-your-registry/demo-quarkus
+----
+
+After this the Docker image should be available in your Docker registry.
+
+== Deploy the OpenTelemetry components
+
+To deploy the components needed for the OpenTelemetry setup, we use the Helm template from the link:https://github.com/devonfw/architectures/tree/master/solutions/monitoring_openTelemetry/helm[devonfw architecture repository].
+Download the folder from Github or clone the repository by executing `git clone https://github.com/devonfw/architectures.git`.
+Before we can deploy the Helm chart, we need to change some values in the `values.yaml` file. Set the following properties.
+
+[yaml]
+----
+application:
+  metrics:
+    jobname: "demo-quarkus"
+    url: "/q/metrics"
+  
+  service:
+    name: "demo-quarkus"
+    port: 8080
+  
+  ...
+----
+
+The install the Helm chart by executing `helm install opentelemetry helm` (make sure to pass the correct path to the Helm chart as the last parameter).
+
+This will deploy the following components:
+
+* OpenTelemetry agent
+* OpenTelemetry collector
+* Jaeger
+* VictoriaMetrics
+* Grafana
+
+== Configure the application
+
+The Quarkus application uses the `quarkus-opentelemetry-exporter-otlp` extension to export the traces. The extension is already added to the project. We just need to configure the application accordingly.
+To do this, set the following environment variables in the `src/main/helm/templates/application-deployment.yaml` file.
+
+[yaml]
+----
+...
+- name: quarkus.opentelemetry.enabled
+  value: "true"
+- name: quarkus.opentelemetry.tracer.exporter.otlp.endpoint
+  value: http://otel-agent:4317
+- name: quarkus.application.name
+  value: demo-quarkus
+...
+----
+
+This will enable the export of the traces to the OpenTelemetry collector.
+
+Then deploy the application by executing `helm install demo-quarkus src/main/helm`.
+
+== Testing the components
+
+After these steps, the application and components for OpenTelemetry should work properly.
+To verify the application, first open http://demo-quarkus.localhost/products in your browser. You should receive a JSON response listing all the products in the database.
+
+Open the Jaeger user interface by navigating to http://jaeger.localhost/search in your browser to view the application traces. Select "demo-quarkus" as the service name and view the results. Each time you make a request to the application, you should see a new record. 
+
+Now let's take a look at the metrics. Navigate to http://grafana.localhost/ in your browser to open Grafana. Log in with the default username and password `admin`. Go to the configuration area and add a new datasource to view the metrics.
+Select the "Prometheus" entry (VictoriaMetrics is compatible with Prometheus) and enter http://victoriametrics.default.svc.cluster.local:8428 as the URL.
+After that you should be able to see the metrics in the Grafana Dashboard.

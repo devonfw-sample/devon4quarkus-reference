@@ -14,14 +14,14 @@ spec:
     spec:
       containers:
         - name: postgresql
-          image: 'docker.io/bitnami/postgresql:12.2.0'
+          image: {{ .Values.postgres.image }}:{{ .Values.postgres.imageTag }}
           ports:
             - name: tcp-postgresql
-              containerPort: 5432
+              containerPort: {{ .Values.postgres.service.port }}
               protocol: TCP
           env:
             - name: POSTGRESQL_PORT_NUMBER
-              value: '5432'
+              value: '{{ .Values.postgres.service.port }}'
             - name: POSTGRESQL_VOLUME_DIR
               value: /bitnami/postgresql
             - name: PGDATA
