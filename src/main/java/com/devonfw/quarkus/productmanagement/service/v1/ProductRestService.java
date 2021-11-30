@@ -14,12 +14,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.media.Content;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.springframework.data.domain.Page;
 import org.tkit.quarkus.rs.models.PageResultDTO;
 
@@ -48,10 +42,6 @@ public class ProductRestService {
   @Inject
   UcManageProduct ucManageProduct;
 
-  @APIResponses({
-  @APIResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PagedProductResponse.class))),
-  @APIResponse(responseCode = "500") })
-  @Operation(operationId = "Get Products", description = "Returns list of Products matching given criteria, uses pagination")
   @GET
   // REST service methods should not declare exceptions, any thrown error will be transformed by exceptionMapper in
   // tkit-rest
@@ -96,11 +86,6 @@ public class ProductRestService {
     return this.ucFindProduct.findProductsOrderedByTitle();
   }
 
-  @APIResponses({
-  @APIResponse(responseCode = "200", description = "OK, New Product created", content = @Content(schema = @Schema(implementation = NewProductDto.class))),
-  @APIResponse(responseCode = "400", description = "Client side error, invalid request"),
-  @APIResponse(responseCode = "500") })
-  @Operation(operationId = "createNewProduct", description = "Stores new Product in DB")
   @POST
   // We did not define custom @Path - so it will use class level path.
   // Although we now have 2 methods with same path, it is ok, because it is a different method (get vs post)
@@ -109,13 +94,9 @@ public class ProductRestService {
     return this.ucManageProduct.saveProduct(dto);
   }
 
-  @APIResponses({
-  @APIResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
-  @APIResponse(responseCode = "404", description = "Product not found"), @APIResponse(responseCode = "500") })
-  @Operation(operationId = "getProductById", description = "Returns Product with given id")
   @GET
   @Path("{id}")
-  public ProductDto getProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
+  public ProductDto getProductById(@PathParam("id") String id) {
 
     return this.ucFindProduct.findProduct(id);
   }
@@ -127,13 +108,9 @@ public class ProductRestService {
     return this.ucFindProduct.findProductByTitle(title);
   }
 
-  @APIResponses({
-  @APIResponse(responseCode = "204", description = "OK", content = @Content(schema = @Schema(implementation = ProductDto.class))),
-  @APIResponse(responseCode = "404", description = "Product not found"), @APIResponse(responseCode = "500") })
-  @Operation(operationId = "deleteProductById", description = "Deletes the Product with given id")
   @DELETE
   @Path("{id}")
-  public void deleteProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
+  public void deleteProductById(@PathParam("id") String id) {
 
     this.ucManageProduct.deleteProduct(id);
   }
