@@ -31,12 +31,6 @@ You can run your application in dev mode that enables live coding using:
 
 You can run tests from your IDE or via Maven. Simply run `./mvnw test ` or `./mvnw package`
 
-## Tkit quarkus
-
-Adding tkit libs to our project gives us several new features. Check the logs for example, all our business methods are now logged and timed. 
-The REST API now handles exceptions gracefully(as JSON response), and we get server side pagination with very little effort. 
-Our tests are now real integration tests with real postgres DB, and are stuitable for CI envs.
-
 ## Access your REST endpoint
 
 Go to http://localhost:8080/animals

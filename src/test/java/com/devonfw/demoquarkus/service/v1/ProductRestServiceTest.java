@@ -12,9 +12,10 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.tkit.quarkus.test.WithDBData;
-import org.tkit.quarkus.test.docker.DockerComposeTestResource;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.devonfw.quarkus.productmanagement.service.v1.model.ProductDto;
 
@@ -22,26 +23,24 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.Response;
 
-//Before you run this test, tkit-test extension starts docker containers from resources/docker-compose.yaml
-//we get a real postgresdb for our tests which will be stopped after tests. No manual test setup is needed.
 @QuarkusTest
-@QuarkusTestResource(DockerComposeTestResource.class)
-class ProductRestServiceTest {// extends AbstractTest {
+@QuarkusTestResource(PostgresResource.class)
+@TestMethodOrder(OrderAnnotation.class)
+class ProductRestServiceTest {
 
   @Test
-  // we also started a micro container, that can populated DB with data from excel
-  // annotating class or method with @WithDBData allows us to scope data for each test even if we use the same DB
-  @WithDBData(value = "data/product.xls", deleteBeforeInsert = true)
+  @Order(1)
   void getAll() {
 
     Response response = given().when().contentType(MediaType.APPLICATION_JSON).get("/products").then().statusCode(200)
         .extract().response();
 
     int products = Integer.valueOf(response.jsonPath().getString("totalElements"));
-    assertEquals(2, products);
+    assertEquals(350, products);
   }
 
   @Test
+  @Order(2)
   void getNonExistingTest() {
 
     given().when().contentType(MediaType.APPLICATION_JSON).get("/products/0").then().log().all().statusCode(404)
@@ -49,6 +48,7 @@ class ProductRestServiceTest {// extends AbstractTest {
   }
 
   @Test
+  @Order(3)
   void businessExceptionTest() {
 
     given().when().contentType(MediaType.APPLICATION_JSON).get("/products/doesnotexist").then().log().all()
@@ -56,7 +56,7 @@ class ProductRestServiceTest {// extends AbstractTest {
   }
 
   @Test
-  @WithDBData(value = "data/empty.xls", deleteBeforeInsert = true)
+  @Order(4)
   void createNewProduct() {
 
     ProductDto product = new ProductDto();
@@ -72,26 +72,28 @@ class ProductRestServiceTest {// extends AbstractTest {
     response = given().when().contentType(MediaType.APPLICATION_JSON).get("/products").then().log().all()
         .statusCode(200).extract().response();
 
+    // number of elements is 351, because there are already 350 products in the database
     int products = Integer.valueOf(response.jsonPath().getString("totalElements"));
-    assertEquals(1, products);
+    assertEquals(351, products);
+
     List<LinkedHashMap<String, String>> created = response.jsonPath().getList("content");
     assertNotNull(created);
-    assertEquals(product.getTitle(), created.get(0).get("title"));
+    assertEquals(product.getTitle(), created.get(350).get("title"));
   }
 
   @Test
-  @WithDBData(value = "data/product.xls", deleteBeforeInsert = true)
+  @Order(5)
   public void testGetById() {
 
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(200)
-        .body("description", equalTo("Apple Notebook"));
+        .body("title", equalTo("Bose Acoustimass 5 Series III Speaker System - AM53BK"))
+        .body("price", equalTo(Float.valueOf(399)));
   }
 
   @Test
-  @WithDBData(value = "data/product.xls", deleteBeforeInsert = true)
+  @Order(6)
   public void deleteById() {
 
-    // delete
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(204);
 
     // after deletion it should be deleted

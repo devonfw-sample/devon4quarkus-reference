@@ -107,11 +107,12 @@
       <scope>provided</scope>
       <version>4.3.1</version>
     </dependency>
-    <!-- Json logging / Enable this if you do not use tkit-json-log -->
-<!--    <dependency>-->
-<!--      <groupId>io.quarkus</groupId>-->
-<!--      <artifactId>quarkus-logging-json</artifactId>-->
-<!--    </dependency>-->
+
+  <!-- JSON logging -->
+   <dependency>
+     <groupId>io.quarkus</groupId>
+     <artifactId>quarkus-logging-json</artifactId>
+   </dependency>
 
     <!-- Lombok, which does what java should do out of the box -->
     <dependency>
@@ -142,51 +143,36 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- 1000kit extensions-->
-    <dependency>
-      <groupId>org.tkit.quarkus</groupId>
-      <artifactId>tkit-quarkus-rest</artifactId>
-      <version>2.4.0</version>
-    </dependency>
-    <!-- Business method logger... -->
-    <dependency>
-      <groupId>org.tkit.quarkus</groupId>
-      <artifactId>tkit-quarkus-log-cdi</artifactId>
-      <version>1.4.5</version>
-    </dependency>
-    <!-- REST communication logger.. -->
-    <dependency>
-      <groupId>org.tkit.quarkus</groupId>
-      <artifactId>tkit-quarkus-log-rs</artifactId>
-      <version>1.4.5</version>
-    </dependency>
-    <!-- Extended structured JSON logger -->
-    <dependency>
-      <groupId>org.tkit.quarkus</groupId>
-      <artifactId>tkit-quarkus-log-json</artifactId>
-      <version>1.4.5</version>
-    </dependency>
-
-    <!-- Component level integration tests -->
-    <dependency>
-      <groupId>org.tkit.quarkus</groupId>
-      <artifactId>tkit-quarkus-test</artifactId>
-      <version>1.12.0</version>
-      <scope>test</scope>
-    </dependency>
-
     <!--Testing -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>1.15.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>1.15.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>1.15.2</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
   <build>
     <plugins>

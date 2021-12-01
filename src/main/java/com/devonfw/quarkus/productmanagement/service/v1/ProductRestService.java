@@ -2,6 +2,7 @@ package com.devonfw.quarkus.productmanagement.service.v1;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -15,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.springframework.data.domain.Page;
-import org.tkit.quarkus.rs.models.PageResultDTO;
 
 import com.devonfw.quarkus.productmanagement.logic.UcFindProduct;
 import com.devonfw.quarkus.productmanagement.logic.UcManageProduct;
@@ -43,9 +43,6 @@ public class ProductRestService {
   UcManageProduct ucManageProduct;
 
   @GET
-  // REST service methods should not declare exceptions, any thrown error will be transformed by exceptionMapper in
-  // tkit-rest
-  // We did not define custom @Path - so it will use class level path
   public Page<ProductDto> getAll(@BeanParam ProductSearchCriteriaDto dto) {
 
     return this.ucFindProduct.findProducts(dto);
@@ -114,8 +111,4 @@ public class ProductRestService {
 
     this.ucManageProduct.deleteProduct(id);
   }
-
-  private static class PagedProductResponse extends PageResultDTO<ProductDto> {
-  }
-
 }
