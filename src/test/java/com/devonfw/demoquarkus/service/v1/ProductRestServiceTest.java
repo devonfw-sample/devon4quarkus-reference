@@ -41,22 +41,6 @@ class ProductRestServiceTest {
 
   @Test
   @Order(2)
-  void getNonExistingTest() {
-
-    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/0").then().log().all().statusCode(404)
-        .extract().response();
-  }
-
-  @Test
-  @Order(3)
-  void businessExceptionTest() {
-
-    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/doesnotexist").then().log().all()
-        .statusCode(422).extract().response();
-  }
-
-  @Test
-  @Order(4)
   void createNewProduct() {
 
     ProductDto product = new ProductDto();
@@ -82,7 +66,7 @@ class ProductRestServiceTest {
   }
 
   @Test
-  @Order(5)
+  @Order(3)
   public void testGetById() {
 
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(200)
@@ -91,7 +75,7 @@ class ProductRestServiceTest {
   }
 
   @Test
-  @Order(6)
+  @Order(4)
   public void deleteById() {
 
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(204);
@@ -101,6 +85,35 @@ class ProductRestServiceTest {
 
     // delete again should fail
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(404);
+  }
+
+  @Test
+  @Order(5)
+  void businessExceptionTest() {
+
+    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/doesnotexist").then().log().all()
+        .statusCode(422).extract().response();
+  }
+
+  @Test
+  @Order(6)
+  void notFoundExceptionTest() {
+
+    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/0").then().log().all().statusCode(404)
+        .extract().response();
+  }
+
+  @Test
+  @Order(7)
+  void validationExceptionTest() {
+
+    // Create a product that does not match the validation rules
+    ProductDto product = new ProductDto();
+    product.setTitle("");
+
+    given().when().body(product).contentType(MediaType.APPLICATION_JSON).post("/products").then().log().all()
+        .statusCode(400);
+
   }
 
 }
