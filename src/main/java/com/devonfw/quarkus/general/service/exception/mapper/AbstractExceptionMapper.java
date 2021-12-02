@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractExceptionMapper {
 
-  private boolean exposeInternalErrorDetails = false;
+  protected boolean exposeInternalErrorDetails = false;
 
   @Context
   UriInfo uriInfo;
