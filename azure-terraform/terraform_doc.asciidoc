@@ -28,25 +28,19 @@ The Azure Kubernetes Service (AKS) is a fully managed Kubernetes service for dep
 . Install the {url-terraform}[Terraform].
 
 == *Install the Prerequisites using Script*
-Install all Prerequisites using an Automated script for Windows and Linux.
+Install all Prerequisites using an Automated script for Windows and Linux, as shown below.
 
-1. You can find the script to Linux {url-script-linux}[here] and use below command to execute.
-
-`./installation_setup_linux.sh`
-
-2. You can find the script to windows {url-script-windows}[here], Follow the command to execute the script.
-
-`.\installation_setup_windows.ps1`
+* The script located for Linux `devon4quarkus-reference/azure-terraform/installation_setup_linux.sh` and windows `devon4quarkus-reference/azure-terraform/installation_setup_windows.ps1`.
 
 == *Login to Azure Account*
 
-Before the Terraform Implementation we need to login Azure account through `Azure CLI`.
+Before the terraform implementation we need to login Azure account through `Azure CLI`.
 ```
 az login
-az account set --subscription $SUBSCRIPTION-ID
+az account set --subscription $SUBSCRIPTION
 ```
 
-== *Set-Up and Initialize Terraform Workspace*
+== *Set-Up And Initialize Terraform Workspace*
 
 In your terminal, clone the following {url-repo-code}[repository] code.
 
@@ -56,7 +50,7 @@ You can explore this repository by changing the directories.
 
 `cd azure-terraform/terraform-aks-setup`
 
-List of the files used to Provision the AKS Cluster.
+List of the files used to provision the AKS Cluster.
 
 . `aks-cluster.tf` provisions a Resource Group and AKS Cluster. The default node pool defines the number of VMs and the VM type cluster uses.
 
@@ -95,16 +89,11 @@ Change the directory in to `Helm Release Provider`.
 
 Here we need to follow same steps as above process to deploy helm charts in to AKS cluster (Example: terraform init and terraform apply).
 
-
 *Note*: According to your working directory, you need to change `terraform-remote-state` path and `Helm Charts` path in `terraform-helm-deploy/helm_release.tf` file.
 
-== Terraform initialize and apply using Script
+== *Creating Terraform Plan using provided script*
 
-Install all Prerequisites using an automated script, you can find this script in `https://github.com/devonfw-sample/devon4quarkus-reference/azure-terraform/script_execute.sh`
-
-== Usage
-
-`bash script_execute.sh`
+Terraform initialize and apply automated way using the provided script, the script located in `/devon4quarkus-reference/azure-terraform/script_execute.sh`
 
 == *Configure kubectl*
 
