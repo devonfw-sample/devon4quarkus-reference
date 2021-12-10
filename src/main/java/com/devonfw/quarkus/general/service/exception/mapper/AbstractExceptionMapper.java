@@ -3,6 +3,7 @@ package com.devonfw.quarkus.general.service.exception.mapper;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -28,13 +29,14 @@ public abstract class AbstractExceptionMapper {
   protected Response createResponse(int status, String errorCode, Exception exception) {
 
     Map<String, Object> jsonMap = new HashMap<>();
-    jsonMap.put("errorCode", errorCode);
+    jsonMap.put("code", errorCode);
     if (this.exposeInternalErrorDetails) {
       jsonMap.put("message", getExposedErrorDetails(exception));
     } else {
       jsonMap.put("message", exception.getMessage());
     }
     jsonMap.put("uri", this.uriInfo.getPath());
+    jsonMap.put("uuid", UUID.randomUUID());
     jsonMap.put("timestamp", ZonedDateTime.now().toString());
     return Response.status(status).type(MediaType.APPLICATION_JSON).entity(jsonMap).build();
   }
