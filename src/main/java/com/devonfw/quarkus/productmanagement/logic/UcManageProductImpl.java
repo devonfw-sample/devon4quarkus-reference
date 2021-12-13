@@ -6,9 +6,9 @@ import javax.transaction.Transactional;
 
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
-import com.devonfw.quarkus.productmanagement.service.v1.mapper.ProductMapper;
-import com.devonfw.quarkus.productmanagement.service.v1.model.NewProductDto;
-import com.devonfw.quarkus.productmanagement.service.v1.model.ProductDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.mapper.ProductMapper;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.NewProductDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductDto;
 
 @Named
 @Transactional

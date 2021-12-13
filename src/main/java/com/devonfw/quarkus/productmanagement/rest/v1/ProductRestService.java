@@ -1,4 +1,4 @@
-package com.devonfw.quarkus.productmanagement.service.v1;
+package com.devonfw.quarkus.productmanagement.rest.v1;
 
 import javax.inject.Inject;
 import javax.ws.rs.BeanParam;
@@ -24,9 +24,9 @@ import org.tkit.quarkus.rs.models.PageResultDTO;
 
 import com.devonfw.quarkus.productmanagement.logic.UcFindProduct;
 import com.devonfw.quarkus.productmanagement.logic.UcManageProduct;
-import com.devonfw.quarkus.productmanagement.service.v1.model.NewProductDto;
-import com.devonfw.quarkus.productmanagement.service.v1.model.ProductDto;
-import com.devonfw.quarkus.productmanagement.service.v1.model.ProductSearchCriteriaDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.NewProductDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductSearchCriteriaDto;
 
 //In Quarkus all JAX-RS resources are treated as CDI beans
 //default is Singleton scope

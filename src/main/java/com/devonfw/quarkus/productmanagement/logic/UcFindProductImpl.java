@@ -13,9 +13,9 @@ import org.springframework.data.domain.PageRequest;
 
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
-import com.devonfw.quarkus.productmanagement.service.v1.mapper.ProductMapper;
-import com.devonfw.quarkus.productmanagement.service.v1.model.ProductDto;
-import com.devonfw.quarkus.productmanagement.service.v1.model.ProductSearchCriteriaDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.mapper.ProductMapper;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductSearchCriteriaDto;
 
 import lombok.extern.slf4j.Slf4j;
 
