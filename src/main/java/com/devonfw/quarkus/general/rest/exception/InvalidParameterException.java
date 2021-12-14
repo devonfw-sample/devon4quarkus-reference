@@ -1,4 +1,4 @@
-package com.devonfw.quarkus.general.service.exception;
+package com.devonfw.quarkus.general.rest.exception;
 
 public class InvalidParameterException extends ApplicationBusinessException {
 

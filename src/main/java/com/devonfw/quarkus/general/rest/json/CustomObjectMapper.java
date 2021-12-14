@@ -1,4 +1,4 @@
-package com.devonfw.quarkus.general.service.json;
+package com.devonfw.quarkus.general.rest.json;
 
 import javax.inject.Singleton;
 

@@ -1,4 +1,4 @@
-package com.devonfw.quarkus.general.service.exception.mapper;
+package com.devonfw.quarkus.general.rest.exception.mapper;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -6,7 +6,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import com.devonfw.quarkus.general.service.exception.ApplicationBusinessException;
+import com.devonfw.quarkus.general.rest.exception.ApplicationBusinessException;
 
 @Provider
 public class RuntimeExceptionMapper extends AbstractExceptionMapper implements ExceptionMapper<RuntimeException> {

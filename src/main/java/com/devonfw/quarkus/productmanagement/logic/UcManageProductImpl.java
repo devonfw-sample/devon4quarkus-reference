@@ -5,7 +5,7 @@ import javax.inject.Named;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 
-import com.devonfw.quarkus.general.service.exception.InvalidParameterException;
+import com.devonfw.quarkus.general.rest.exception.InvalidParameterException;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
 import com.devonfw.quarkus.productmanagement.rest.v1.mapper.ProductMapper;

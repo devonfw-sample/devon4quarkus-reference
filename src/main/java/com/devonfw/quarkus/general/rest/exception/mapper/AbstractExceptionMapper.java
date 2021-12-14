@@ -1,4 +1,4 @@
-package com.devonfw.quarkus.general.service.exception.mapper;
+package com.devonfw.quarkus.general.rest.exception.mapper;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
