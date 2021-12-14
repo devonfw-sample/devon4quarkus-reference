@@ -12,6 +12,13 @@ import javax.ws.rs.core.UriInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Abstract super class for all specific exception mapper. To override the default ExceptionMapper of RESTEasy, own
+ * ExceptionMapper for specific exceptions (e.g. NotFoundException) have to be created
+ *
+ * @see <a href="https://github.com/quarkusio/quarkus/issues/7883">Quarkus Issue 7883</a>
+ *
+ */
 @Slf4j
 public abstract class AbstractExceptionMapper {
 
