@@ -1,4 +1,4 @@
-package com.devonfw.quarkus.productmanagement.service.v1.model;
+package com.devonfw.quarkus.productmanagement.rest.v1.model;
 
 import java.math.BigDecimal;
 

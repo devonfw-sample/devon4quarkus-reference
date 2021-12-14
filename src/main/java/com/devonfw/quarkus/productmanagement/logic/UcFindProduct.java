@@ -2,8 +2,8 @@ package com.devonfw.quarkus.productmanagement.logic;
 
 import org.springframework.data.domain.Page;
 
-import com.devonfw.quarkus.productmanagement.service.v1.model.ProductDto;
-import com.devonfw.quarkus.productmanagement.service.v1.model.ProductSearchCriteriaDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductSearchCriteriaDto;
 
 public interface UcFindProduct {
   Page<ProductDto> findProducts(ProductSearchCriteriaDto dto);

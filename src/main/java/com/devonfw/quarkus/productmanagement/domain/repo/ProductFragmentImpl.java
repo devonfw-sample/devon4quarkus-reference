@@ -19,7 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity_;
 import com.devonfw.quarkus.productmanagement.domain.model.QProductEntity;
-import com.devonfw.quarkus.productmanagement.service.v1.model.ProductSearchCriteriaDto;
+import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductSearchCriteriaDto;
 import com.querydsl.jpa.impl.JPAQuery;
 
 public class ProductFragmentImpl implements ProductFragment {
