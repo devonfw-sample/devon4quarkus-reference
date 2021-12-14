@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Abstract super class for all specific exception mapper. To override the default ExceptionMapper of RESTEasy, own
- * ExceptionMapper for specific exceptions (e.g. NotFoundException) have to be created
+ * ExceptionMapper for specific exceptions (e.g. NotFoundException) have to be created. Just using
+ * ExcecptionMapper<Throwable> will not work, because the RESTEasy mappers are then more specific.
+ *
  *
  * @see <a href="https://github.com/quarkusio/quarkus/issues/7883">Quarkus Issue 7883</a>
  *
