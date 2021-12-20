@@ -1,5 +1,6 @@
 package com.devonfw.quarkus.productmanagement.rest.v1;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.data.domain.Page;
 
+import com.devonfw.quarkus.general.rest.security.ApplicationAccessControlConfig;
 import com.devonfw.quarkus.productmanagement.logic.UcFindProduct;
 import com.devonfw.quarkus.productmanagement.logic.UcManageProduct;
 import com.devonfw.quarkus.productmanagement.rest.v1.model.NewProductDto;
@@ -82,6 +84,7 @@ public class ProductRestService {
   }
 
   @POST
+  @RolesAllowed(ApplicationAccessControlConfig.PERMISSION_SAVE_PRODUCT)
   // We did not define custom @Path - so it will use class level path.
   // Although we now have 2 methods with same path, it is ok, because it is a different method (get vs post)
   public ProductDto createNewProduct(NewProductDto dto) {
@@ -104,6 +107,7 @@ public class ProductRestService {
   }
 
   @DELETE
+  @RolesAllowed(ApplicationAccessControlConfig.PERMISSION_DELETE_PRODUCT)
   @Path("{id}")
   public ProductDto deleteProductById(@PathParam("id") String id) {
 

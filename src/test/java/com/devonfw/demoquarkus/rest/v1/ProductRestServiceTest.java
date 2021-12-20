@@ -17,10 +17,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import com.devonfw.quarkus.general.rest.security.ApplicationAccessControlConfig;
 import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductDto;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.response.Response;
 
 @QuarkusTest
@@ -48,6 +50,7 @@ class ProductRestServiceTest {
   }
 
   @Test
+  @TestSecurity(user = "testuser", roles = { ApplicationAccessControlConfig.PERMISSION_SAVE_PRODUCT })
   @Order(3)
   void createNewProduct() {
 
@@ -83,6 +86,7 @@ class ProductRestServiceTest {
   }
 
   @Test
+  @TestSecurity(user = "testuser", roles = { ApplicationAccessControlConfig.PERMISSION_DELETE_PRODUCT })
   @Order(5)
   public void deleteById() {
 
