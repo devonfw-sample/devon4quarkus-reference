@@ -1,0 +1,132 @@
+:toc: macro
+toc::[]
+
+= Authentication and authorization
+
+Authentication and authorization are important aspects to consider when implementing microservice architectures. A brief overview of these two aspects can be found in the devonfw solutions browser or in the devon4j documentation:
+
+* link:https://github.com/devonfw/solutions/blob/master/solutions/security_authentication/index.asciidoc[Authentication]
+* link:https://github.com/devonfw/solutions/blob/master/solutions/security_authorization/index.asciidoc[Authorization]
+* link:https://github.com/devonfw/devon4j/blob/master/documentation/guide-access-control.asciidoc[devon4j documentation]
+
+This guide shows how to enable role-based access control using JWTs (link:https://github.com/devonfw/devon4j/blob/master/documentation/guide-jwt.asciidoc[JSON Web Tokens]) and authentication using Keycloak as centralized IAM (Identity and Access Management) solution.
+
+== Setup and configure Keycloak
+
+The `docker-compose.yaml` file already includes a configuration for the setup of Keycloak. Use the `docker-compose up` command to deploy Keycloak in your Docker environment.
+You can also install Keycloak on your local machine without Docker. For this, follow the instructions on the official link:https://www.keycloak.org/docs/latest/server_installation/index.html[Keycloak website].
+
+You can access Keycloak by browsing to http://localhost:8180/auth/ in your browser. Open the Administration console and log in with the default username "admin" and password "admin".
+
+The first step is to create a new realm. A realm in Keycloak is used to manage a set of users with their credentials, groups and roles. Click on "Add realm" and then select the `keycloak-realm.json` file from the documentation/Keycloak folder of this repository.
+This will create the `devon4quarkus-product` realm with some preconfigured roles.
+
+In the next step, add a new user. Click on the "Users" section in the outline, then on "Add user" and fill in the form fields.
+
+image::keycloak_add_user.png[Add a new user]
+
+After this, open the "Credentials" tab and enter the credentials for the user. The newly created user is now able to authenticate himself in Keycloak. By default, new users must enter a new password themselves the first time they log in to fully set up the new account. So open  http://localhost:8180/auth/realms/devon4quarkus-product/account, sign in with the new user and enter new credentials for him.
+
+== Enable the access control in Quarkus
+
+To secure the Quarkus application, we use role-based access control (RBAC) using JWTs, which is the common approach in devon4j. We use the Smallrye JWT extension to implement it. For more documentation, see the official link:https://quarkus.io/guides/security-jwt[Quarkus guide on JWT RBAC].
+
+.**Smallrye JWT extension**
+[source,xml]
+----
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-jwt</artifactId>
+</dependency>
+----
+
+The extensions is already included in the dependencies. To enable it, set `quarkus.smallrye-jwt.enabled=true` in the `application.properties` file.
+
+Additionally, the issuer of the JWT and the location of the public key must be configured. To do this, the following two properties must be set:
+
+[source,properties]
+----
+mp.jwt.verify.issuer=http://localhost:8180/auth/realms/devon4quarkus-product
+mp.jwt.verify.publickey.location=http://localhost:8180/auth/realms/devon4quarkus-product/protocol/openid-connect/certs
+----
+
+== Test the application
+
+First, try to make a request to get all products:
+
+.*Bash command*
+[source, bash]
+----
+curl -X GET http://localhost:8080/products -v
+----
+
+.*Powershell command*
+[source, powershell]
+----
+Invoke-WebRequest -method GET http://localhost:8080/products
+----
+
+You should receive a response with status code 200 containing a list of all products. This is because the corresponding method in the `ProductRestService.java` file is annotated with `@PermitAll`, which causes anyone (even without having a specific role) to be able to access this method.
+
+In the next step, try to delete a product:
+
+.*Bash command*
+[source, bash]
+----
+curl -X DELETE http://localhost:8080/products/100 -v
+----
+
+.*Powershell command*
+[source, powershell]
+----
+Invoke-WebRequest -method DELETE http://localhost:8080/products/100
+----
+
+You will get an `401 Unauthorized` response. This is because the corresponding method is annotated with `@RolesAllowed(ApplicationAccessControlConfig.PERMISSION_DELETE_PRODUCT)`, which means that only users with a valid token and the corresponding role can access this method.
+
+---
+
+So in the next step, add the appropriate role to the user. Log in to Keycloak again with the admin credentials, edit the previously created user and add the role "devon4quarkus-product.DeleteProduct" to the field "Assigned Roles".
+
+image::keycloak_user_role.png[Configure the role]
+
+After that, you need to obtain a token from Keycloak that you can pass in the request. To do this, use the following commands:
+
+.*Bash command*
+[source, bash]
+----
+curl -d 'client_id=devon4quarkus-product-cli' -d 'username=john doe' -d 'password=demo' -d 'grant_type=password' http://localhost:8180/auth/realms/devon4quarkus-product/protocol/openid-connect/token
+----
+
+.*Powershell command*
+[source, powershell]
+----
+$body = @{
+  "client_id" = "devon4quarkus-product-cli"
+  "grant_type" = "password"
+  "username" = "john doe"
+  "password" = "demo"
+}
+
+Invoke-WebRequest -method POST -body $body -contenttype "application/x-www-form-urlencoded" http://localhost:8180/auth/realms/devon4quarkus-product/protocol/openid-connect/token | Select-Object -Expand content
+----
+
+Finally we can again test the delete method. Pass the "access_token" from the previous response as Bearer token in the Authorization header of the request.
+
+.*Bash command*
+[source, bash]
+----
+curl -X DELETE -H "Authorization: Bearer $TOKEN" http://localhost:8080/products/100 -v
+----
+
+.*Powershell command*
+[source, powershell]
+----
+$headers = @{
+    Authorization="Bearer $TOKEN"
+}
+
+Invoke-WebRequest -method DELETE -headers $headers http://localhost:8080/products/100
+----
+
+Now you should be able to delete the product.

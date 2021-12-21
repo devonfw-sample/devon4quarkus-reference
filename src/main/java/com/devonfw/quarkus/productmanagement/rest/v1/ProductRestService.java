@@ -1,5 +1,6 @@
 package com.devonfw.quarkus.productmanagement.rest.v1;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.BeanParam;
@@ -43,6 +44,7 @@ public class ProductRestService {
   UcManageProduct ucManageProduct;
 
   @GET
+  @PermitAll
   public Page<ProductDto> getAll(@BeanParam ProductSearchCriteriaDto dto) {
 
     return this.ucFindProduct.findProducts(dto);
@@ -93,6 +95,7 @@ public class ProductRestService {
   }
 
   @GET
+  @PermitAll
   @Path("{id}")
   public ProductDto getProductById(@PathParam("id") String id) {
 
