@@ -16,7 +16,7 @@ This guide shows how to enable role-based access control using JWTs (link:https:
 The `docker-compose.yaml` file already includes a configuration for the setup of Keycloak. Use the `docker-compose up` command to deploy Keycloak in your Docker environment.
 You can also install Keycloak on your local machine without Docker. For this, follow the instructions on the official link:https://www.keycloak.org/docs/latest/server_installation/index.html[Keycloak website].
 
-You can access Keycloak by browsing to http://localhost:8180/auth/ in your browser. Open the Administration console and log in with the default username "admin" and password "admin".
+You can access Keycloak by navigating to http://localhost:8180/auth/ in your browser. Open the Administration console and log in with the default username "admin" and password "admin".
 
 The first step is to create a new realm. A realm in Keycloak is used to manage a set of users with their credentials, groups and roles. Click on "Add realm" and then select the `keycloak-realm.json` file from the documentation/Keycloak folder of this repository.
 This will create the `devon4quarkus-product` realm with some preconfigured roles.
@@ -25,7 +25,7 @@ In the next step, add a new user. Click on the "Users" section in the outline, t
 
 image::keycloak_add_user.png[Add a new user]
 
-After this, open the "Credentials" tab and enter the credentials for the user. The newly created user is now able to authenticate himself in Keycloak. By default, new users must enter a new password themselves the first time they log in to fully set up the new account. So open  http://localhost:8180/auth/realms/devon4quarkus-product/account, sign in with the new user and enter new credentials for him.
+After this, open the "Credentials" tab and enter the credentials of the user. The newly created user is now able to authenticate himself in Keycloak. By default, new users must enter a new password themselves the first time they log in to fully set up the new account. So open  http://localhost:8180/auth/realms/devon4quarkus-product/account, sign in with the new user and enter new credentials for him.
 
 == Enable the access control in Quarkus
 
@@ -111,7 +111,7 @@ $body = @{
 Invoke-WebRequest -method POST -body $body -contenttype "application/x-www-form-urlencoded" http://localhost:8180/auth/realms/devon4quarkus-product/protocol/openid-connect/token | Select-Object -Expand content
 ----
 
-Finally we can again test the delete method. Pass the "access_token" from the previous response as Bearer token in the Authorization header of the request.
+Finally, we can test the delete method again. Pass the "access_token" from the previous response as Bearer token in the Authorization header of the request.
 
 .*Bash command*
 [source, bash]
