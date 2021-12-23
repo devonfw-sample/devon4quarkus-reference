@@ -52,6 +52,8 @@ mp.jwt.verify.publickey.location=http://localhost:8180/auth/realms/devon4quarkus
 
 == Test the application
 
+Now test whether the access control work. Run the application with `mvn clean compile quarkus:dev`.
+
 First, try to make a request to get all products:
 
 .*Bash command*
