@@ -63,20 +63,21 @@ class ProductRestServiceTest {
   @Test
   @Order(4)
   public void deleteById() {
-    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(204);
+
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/product/v1/1").then().statusCode(204);
 
     // after deletion it should be deleted
-    given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(404);
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/product/v1/1").then().statusCode(404);
 
     // delete again should fail
-    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(404);
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/product/v1/1").then().statusCode(404);
   }
 
   @Test
   @Order(5)
   void businessExceptionTest() {
 
-    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/doesnotexist").then().log().all()
+    given().when().contentType(MediaType.APPLICATION_JSON).get("/product/v1/doesnotexist").then().log().all()
         .statusCode(422).extract().response();
   }
 
@@ -84,7 +85,7 @@ class ProductRestServiceTest {
   @Order(6)
   void notFoundExceptionTest() {
 
-    given().when().contentType(MediaType.APPLICATION_JSON).get("/products/0").then().log().all().statusCode(404)
+    given().when().contentType(MediaType.APPLICATION_JSON).get("/product/v1/0").then().log().all().statusCode(404)
         .extract().response();
   }
 
@@ -96,7 +97,7 @@ class ProductRestServiceTest {
     ProductDto product = new ProductDto();
     product.setTitle("");
 
-    given().when().body(product).contentType(MediaType.APPLICATION_JSON).post("/products").then().log().all()
+    given().when().body(product).contentType(MediaType.APPLICATION_JSON).post("/product/v1").then().log().all()
         .statusCode(400);
 
   }

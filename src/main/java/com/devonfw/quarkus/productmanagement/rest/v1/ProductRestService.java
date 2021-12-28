@@ -1,35 +1,30 @@
 package com.devonfw.quarkus.productmanagement.rest.v1;
 
-import static com.devonfw.quarkus.productmanagement.utils.StringUtils.isEmpty;
 import static javax.ws.rs.core.Response.created;
-import static javax.ws.rs.core.Response.status;
 
 import java.util.Optional;
 
 import javax.inject.Inject;
-
 import javax.validation.Valid;
-
-import javax.ws.rs.BeanParam;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.springframework.data.domain.Page;
 
+import com.devonfw.quarkus.general.rest.exception.InvalidParameterException;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
 import com.devonfw.quarkus.productmanagement.rest.v1.mapper.ProductMapper;
@@ -61,11 +56,7 @@ public class ProductRestService {
   }
 
   @POST
-  public Response createNewProduct(ProductDto product) {
-
-    if (isEmpty(product.getTitle())) {
-      throw new WebApplicationException("Title was not set on request.", 400);
-    }
+  public Response createNewProduct(@Valid ProductDto product) {
 
     ProductEntity productEntity = this.productRepository.save(this.productMapper.map(product));
 
@@ -88,11 +79,15 @@ public class ProductRestService {
   @Path("{id}")
   public ProductDto getProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
 
-    Optional<ProductEntity> product = this.productRepository.findById(Long.valueOf(id));
-    if (product.isPresent()) {
-      return this.productMapper.map(product.get());
+    if (!StringUtils.isNumeric(id)) {
+      throw new InvalidParameterException("Unable to parse ID: " + id);
     }
-    return null;
+
+    Optional<ProductEntity> product = this.productRepository.findById(Long.valueOf(id));
+    if (!product.isPresent()) {
+      throw new NotFoundException();
+    }
+    return this.productMapper.map(product.get());
   }
 
   @GET
@@ -104,10 +99,16 @@ public class ProductRestService {
 
   @DELETE
   @Path("{id}")
-  public Response deleteProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
+  public void deleteProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
 
-    this.productRepository.deleteById(Long.valueOf(id));
-    return status(Status.NO_CONTENT.getStatusCode()).build();
+    if (!StringUtils.isNumeric(id)) {
+      throw new InvalidParameterException("Unable to parse ID: " + id);
+    }
+
+    try {
+      this.productRepository.deleteById(Long.valueOf(id));
+    } catch (IllegalArgumentException e) {
+      throw new NotFoundException();
+    }
   }
-
 }

@@ -1,6 +1,5 @@
 package com.devonfw.quarkus.productmanagement.domain.repo;
 
-import static com.devonfw.quarkus.productmanagement.utils.StringUtils.isEmpty;
 import static java.util.Objects.isNull;
 
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +30,7 @@ public class ProductFragmentImpl implements ProductFragment {
 
     QProductEntity product = QProductEntity.productEntity;
     List<Predicate> predicates = new ArrayList<>();
-    if (!isEmpty(searchCriteria.getTitle())) {
+    if (!StringUtils.isEmpty(searchCriteria.getTitle())) {
       predicates.add(product.title.eq(searchCriteria.getTitle()));
     }
     if (!isNull(searchCriteria.getPrice())) {
