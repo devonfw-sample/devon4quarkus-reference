@@ -102,5 +102,16 @@ services:
     networks:
       - demo
 
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak:latest
+    ports:
+      - "8180:8080"
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    networks:
+      - demo
+
 networks:
   demo:
