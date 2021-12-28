@@ -1,9 +1,17 @@
 package com.devonfw.quarkus.productmanagement.rest.v1;
 
+import static com.devonfw.quarkus.productmanagement.utils.StringUtils.isEmpty;
+import static javax.ws.rs.core.Response.created;
+import static javax.ws.rs.core.Response.status;
+
+import java.util.Optional;
+
 import javax.inject.Inject;
+
 import javax.validation.Valid;
 
 import javax.ws.rs.BeanParam;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,104 +19,95 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.springframework.data.domain.Page;
 
-import com.devonfw.quarkus.productmanagement.logic.UcFindProduct;
-import com.devonfw.quarkus.productmanagement.logic.UcManageProduct;
-import com.devonfw.quarkus.productmanagement.rest.v1.model.NewProductDto;
+import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
+import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
+import com.devonfw.quarkus.productmanagement.rest.v1.mapper.ProductMapper;
 import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductDto;
 import com.devonfw.quarkus.productmanagement.rest.v1.model.ProductSearchCriteriaDto;
 
-//In Quarkus all JAX-RS resources are treated as CDI beans
-//default is Singleton scope
-@Path("/products")
-// how we serialize response
+@Path("/product/v1")
 @Produces(MediaType.APPLICATION_JSON)
-// how we deserialize params
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProductRestService {
 
-  // using @Context we can inject contextual info from JAXRS(e.g. http request, current uri info, endpoint info...)
+  @Inject
+  ProductRepository productRepository;
+
+  @Inject
+  ProductMapper productMapper;
+
   @Context
   UriInfo uriInfo;
 
-  @Inject
-  UcFindProduct ucFindProduct;
-
-  @Inject
-  UcManageProduct ucManageProduct;
-
   @GET
-  public Page<ProductDto> getAll(@BeanParam ProductSearchCriteriaDto dto) {
-
-    return this.ucFindProduct.findProducts(dto);
-  }
-
-  @GET
-  @Path("criteriaApi")
-  public Page<ProductDto> getAllCriteriaApi(@BeanParam ProductSearchCriteriaDto dto) {
-
-    return this.ucFindProduct.findProductsByCriteriaApi(dto);
-  }
-
-  @GET
-  @Path("queryDsl")
-  public Page<ProductDto> getAllQueryDsl(@BeanParam ProductSearchCriteriaDto dto) {
-
-    return this.ucFindProduct.findProductsByQueryDsl(dto);
-  }
-
-  @GET
-  @Path("query")
-  public Page<ProductDto> getAllQuery(@BeanParam ProductSearchCriteriaDto dto) {
-
-    return this.ucFindProduct.findProductsByTitleQuery(dto);
-  }
-
-  @GET
-  @Path("nativeQuery")
-  public Page<ProductDto> getAllNativeQuery(@BeanParam ProductSearchCriteriaDto dto) {
-
-    return this.ucFindProduct.findProductsByTitleNativeQuery(dto);
-  }
-
-  @GET
-  @Path("ordered")
   public Page<ProductDto> getAllOrderedByTitle() {
 
-    return this.ucFindProduct.findProductsOrderedByTitle();
+    Page<ProductEntity> products = this.productRepository.findAllByOrderByTitle();
+    if (products.isEmpty()) {
+      return Page.empty();
+    }
+    return this.productMapper.map(products);
   }
 
   @POST
-  // We did not define custom @Path - so it will use class level path.
-  // Although we now have 2 methods with same path, it is ok, because it is a different method (get vs post)
-  public ProductDto createNewProduct(@Valid NewProductDto dto) {
+  public Response createNewProduct(ProductDto product) {
 
-    return this.ucManageProduct.saveProduct(dto);
+    if (isEmpty(product.getTitle())) {
+      throw new WebApplicationException("Title was not set on request.", 400);
+    }
+
+    ProductEntity productEntity = this.productRepository.save(this.productMapper.map(product));
+
+    UriBuilder uriBuilder = this.uriInfo.getAbsolutePathBuilder().path(Long.toString(productEntity.getId()));
+    return created(uriBuilder.build()).build();
+  }
+
+  @POST
+  @Path("search")
+  public Page<ProductDto> findProducts(ProductSearchCriteriaDto searchCriteria) {
+
+    Page<ProductEntity> products = this.productRepository.findByCriteria(searchCriteria);
+    if (products.isEmpty()) {
+      return Page.empty();
+    }
+    return this.productMapper.map(products);
   }
 
   @GET
   @Path("{id}")
-  public ProductDto getProductById(@PathParam("id") String id) {
+  public ProductDto getProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
 
-    return this.ucFindProduct.findProduct(id);
+    Optional<ProductEntity> product = this.productRepository.findById(Long.valueOf(id));
+    if (product.isPresent()) {
+      return this.productMapper.map(product.get());
+    }
+    return null;
   }
 
   @GET
   @Path("title/{title}")
   public ProductDto getProductByTitle(@PathParam("title") String title) {
 
-    return this.ucFindProduct.findProductByTitle(title);
+    return this.productMapper.map(this.productRepository.findByTitle(title));
   }
 
   @DELETE
   @Path("{id}")
-  public void deleteProductById(@PathParam("id") String id) {
+  public Response deleteProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
 
-    this.ucManageProduct.deleteProduct(id);
+    this.productRepository.deleteById(Long.valueOf(id));
+    return status(Status.NO_CONTENT.getStatusCode()).build();
   }
+
 }

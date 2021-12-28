@@ -2,33 +2,24 @@ package com.devonfw.quarkus.productmanagement.rest.v1.model;
 
 import java.math.BigDecimal;
 
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.QueryParam;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.devonfw.quarkus.general.domain.model.ApplicationSearchCriteriaDto;
 
-@Getter
-@Setter
-public class ProductSearchCriteriaDto {
+import lombok.Data;
 
-  @QueryParam("title")
+@Data
+public class ProductSearchCriteriaDto extends ApplicationSearchCriteriaDto {
+
+  @Schema(description = "Product title")
   private String title;
 
-  @QueryParam("page")
-  @DefaultValue("0")
-  private int pageNumber = 0;
-
-  @QueryParam("size")
-  @DefaultValue("10")
-  private int pageSize = 10;
-
-  @QueryParam("priceMin")
+  @Schema(description = "Product Min price")
   private BigDecimal priceMin;
 
-  @QueryParam("priceMax")
+  @Schema(description = "Product Max price")
   private BigDecimal priceMax;
 
-  @QueryParam("price")
+  @Schema(description = "Product price")
   private BigDecimal price;
 }

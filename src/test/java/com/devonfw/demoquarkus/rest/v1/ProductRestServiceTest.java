@@ -1,14 +1,11 @@
 package com.devonfw.demoquarkus.rest.v1;
 
 import static io.restassured.RestAssured.given;
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
@@ -32,9 +29,8 @@ class ProductRestServiceTest {
   @Order(1)
   void getAll() {
 
-    Response response = given().when().contentType(MediaType.APPLICATION_JSON).get("/products").then().statusCode(200)
-        .extract().response();
-
+    Response response = given().when().contentType(MediaType.APPLICATION_JSON).get("/product/v1").then().log().all()
+        .statusCode(OK.getStatusCode()).extract().response();
     int products = Integer.valueOf(response.jsonPath().getString("totalElements"));
     assertEquals(350, products);
   }
@@ -47,29 +43,19 @@ class ProductRestServiceTest {
     product.setTitle("HP Notebook");
     product.setDescription("ZBook");
     product.setPrice(BigDecimal.valueOf(1));
-
-    Response response = given().when().body(product).contentType(MediaType.APPLICATION_JSON).post("/products").then()
-        .log().all().statusCode(200).header("Location", nullValue()).extract().response();
-
-    assertEquals(200, response.statusCode());
-
-    response = given().when().contentType(MediaType.APPLICATION_JSON).get("/products").then().log().all()
-        .statusCode(200).extract().response();
-
-    // number of elements is 351, because there are already 350 products in the database
-    int products = Integer.valueOf(response.jsonPath().getString("totalElements"));
-    assertEquals(351, products);
-
-    List<LinkedHashMap<String, String>> created = response.jsonPath().getList("content");
-    assertNotNull(created);
-    assertEquals(product.getTitle(), created.get(350).get("title"));
+    Response response = given().when().body(product).contentType(MediaType.APPLICATION_JSON).post("/product/v1").then()
+        .log().all().statusCode(201).extract().response();
+    String url = response.header("Location");
+    response = given().when().contentType(MediaType.APPLICATION_JSON).get(url).then().log().all().statusCode(200)
+        .extract().response();
+    assertEquals(product.getTitle(), response.jsonPath().getString("title"));
   }
 
   @Test
   @Order(3)
   public void testGetById() {
 
-    given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/products/1").then().statusCode(200)
+    given().when().log().all().contentType(MediaType.APPLICATION_JSON).get("/product/v1/1").then().statusCode(200)
         .body("title", equalTo("Bose Acoustimass 5 Series III Speaker System - AM53BK"))
         .body("price", equalTo(Float.valueOf(399)));
   }
@@ -77,7 +63,6 @@ class ProductRestServiceTest {
   @Test
   @Order(4)
   public void deleteById() {
-
     given().when().log().all().contentType(MediaType.APPLICATION_JSON).delete("/products/1").then().statusCode(204);
 
     // after deletion it should be deleted

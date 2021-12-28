@@ -33,7 +33,7 @@ You can run tests from your IDE or via Maven. Simply run `./mvnw test ` or `./mv
 
 ## Access your REST endpoint
 
-Go to http://localhost:8080/animals
+Go to http://localhost:8080/product/v1
 
 
 ## OpenAPI & Swagger UI
