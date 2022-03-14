@@ -8,7 +8,7 @@ Here are the high level steps which are followed by Azure CLI Commands.
 
 * Connect to Azure AKS Cluster.
 * Enable the Ingress Controller in the Cluster.
-* Update the Ingress YAML files.
+* Update the Ingress YAML file.
 * Execute/Apply the YAML files and test the application.
 
 ```
@@ -36,7 +36,7 @@ az aks show --resource-group <myResourceGroup> --name <myAKSCluster> --query add
 #Sample Command for Reference
 az aks show --resource-group DefaultResourceGroup-WEU --name devon-aks --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o table
 ```
-* Update the two Ingress YAML Files present in the folder /k8s/azure with the DomainName came as the output of the above command
+* Update the Ingress YAML File present in the k8s folder with the DomainName came as the output of the above command
 
 ```
 ...
