@@ -8,7 +8,7 @@ Here are the high level steps which are followed by AWS CLI Commands.
 
 * Connect to AWS EKS Cluster.
 * Create one Ingress Controller in the Cluster.
-* Update the Ingress YAML files.
+* Update the Ingress YAML file.
 * Execute/Apply the YAML files and test the application.
 
 ```
@@ -35,7 +35,7 @@ helm upgrade --install nginx-ingress nginx-ingress-controller --set ingressClass
 #Get the DomainName/HostName from the below command - Nginx Ingress Controller's LoadBalancer
 kubectl get svc --all-namespaces
 ```
-* Update the two Ingress YAML Files present in the folder /k8s/aws with the DomainName came as the output of the above command
+* Update the Ingress YAML File present in the k8s folder with the DomainName came as the output of the above command
 
 ```
 ...
