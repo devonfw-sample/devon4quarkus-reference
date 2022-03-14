@@ -82,7 +82,6 @@ az network dns record-set a add-record \
 
 ```
 #Execute the Kubernetes YAML Files
-cd k8s/azure
 kubectl apply -f ./
 
 #Check the status of the Deployments, Services, Pods
