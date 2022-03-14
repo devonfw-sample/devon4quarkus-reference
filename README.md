@@ -101,6 +101,9 @@ kubectl apply -f k8s/ingress.yaml
 
 Give it a few moments and then open http://demo-quarkus.localhost/products/ in your browser.
 
+- For deploying in **AWS** EKS Cluster, refer this [link](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/k8s/aws-k8s-steps.adoc).
+- For deploying in **Azure** AKS Cluster, refer this [link](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/k8s/azure-k8s-steps.adoc).
+
 ## Helm
 
 > **_NOTE:_**  Be sure to remove your old resources first
