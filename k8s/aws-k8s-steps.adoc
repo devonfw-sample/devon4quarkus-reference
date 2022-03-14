@@ -51,7 +51,6 @@ spec:
 
 ```
 #Execute the Kubernetes YAML Files
-cd k8s/aws
 kubectl apply -f ./
 
 #Check the status of the Deployments, Services, Pods
