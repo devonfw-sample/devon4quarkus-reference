@@ -88,4 +88,7 @@ kubectl apply -f ./
 kubectl get all
 ```
 * Once the Services and Pods are up and running, use the DomainName URL and test the Application. 
-* Sample URL for Reference - http://100001xx11x11xxx1xxx.westeurope.aksapp.io/
+* Sample Application URLs for Reference
+** http://100001xx11x11xxx1xxx.westeurope.aksapp.io/products/
+** http://100001xx11x11xxx1xxx.westeurope.aksapp.io/q/health
+** http://100001xx11x11xxx1xxx.westeurope.aksapp.io/q/metrics
