@@ -3,6 +3,10 @@ kind: Ingress
 metadata:
   name: demo-quarkus
   annotations:
+    #For AWS EKS, uncomment the below line
+    #kubernetes.io/ingress.class: nginx
+    #For Azure AKS, uncomment the below line
+    #kubernetes.io/ingress.class: addon-http-application-routing
     ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
@@ -16,3 +20,5 @@ spec:
                 port:
                   number: 8080
       host: demo-quarkus.localhost
+      #AWS   Sample URL - a76dadbe8b2d2496fae132b0df25c4bc-266746312.eu-west-1.elb.amazonaws.com
+      #Azure Sample URL - a614aca2d4ce4767a649.westeurope.aksapp.io
