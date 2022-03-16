@@ -2,6 +2,7 @@
 
 === Pre-requisites
 * Azure AKS Cluster is required to be up and running for this deployment. In case, you need to create new AKS Cluster, please refer this link:https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal[link].
+* Azure CLI is to be installed. For installing, please refer this link:https://docs.microsoft.com/en-us/cli/azure/install-azure-cli[link].
 
 === Steps
 Here are the high level steps which are followed by Azure CLI Commands.
