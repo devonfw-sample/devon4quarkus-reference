@@ -2,6 +2,7 @@
 
 === Pre-requisites
 * AWS EKS Cluster is required to be up and running for this deployment. In case, you need to create new EKS Cluster, please refer this link:https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html[link].
+* AWS CLI is to be installed. For installing, please refer this link:https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html[link].
 
 === Steps
 Here are the high level steps which are followed by AWS CLI Commands.
