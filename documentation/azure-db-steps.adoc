@@ -8,9 +8,8 @@
 Here are the high level steps which are followed by Azure CLI Commands.
 
 * Connect to Azure Database for PostgreSQL.
-* Create the database.
-* Update the application.properties file.
-* Continue with the deployment steps.
+* Create the database and the connection parameters.
+* Update the application.properties file and continue with the deployment steps.
 
 ```
 #Connect to Azure from CLI (either local machine or VM)
