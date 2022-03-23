@@ -1,7 +1,7 @@
 == Using Azure Database for PostgreSQL in place of default PostgreSQL DB
 
 === Pre-requisites
-* Azure Database for PostgreSQL is required to be up and running for this deployment. In case, you need to create new database, please refer this link:https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/postgresql/quickstart-create-server-database-azure-cli.md[link].
+* Azure Database for PostgreSQL is required to be up and running for this deployment. In case, you need to create new database, please refer link:https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/postgresql/quickstart-create-server-database-azure-cli.md[CLI] or link:https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal[Azure Portal].
 * Azure CLI is to be installed. For installing, please refer this link:https://docs.microsoft.com/en-us/cli/azure/install-azure-cli[link].
 
 === Steps
@@ -17,4 +17,34 @@ az login
 
 #Set the Azure Subscription in which Kubernetes Cluster presents
 az account set --subscription <mySubscription>
+
+#Connect to DB using the below format
+psql --host=<dbserver-name>.postgres.database.azure.com --port=5432 --username=<admin-username>@<dbserver-name> --dbname=postgres
+
+#Sample
+psql --host=d4qdb.postgres.database.azure.com --port=5432 --username=devonadmin@d4qdb --dbname=postgres
+
+#After logging into psql prompt, create the demo DB to use in our reference project
+CREATE DATABASE demo;
+
 ```
+
+* Update the application.properties file by changing the below section.
+
+```
+# Datasource configuration
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/demo
+quarkus.datasource.username=demo
+quarkus.datasource.password=********
+```
+* Sample for reference
+```
+# Datasource configuration
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.jdbc.url=jdbc:postgresql://d4qdb.postgres.database.azure.com:5432/demo
+quarkus.datasource.username=devonadmin@d4qdb
+quarkus.datasource.password=**********
+```
+
+* Continue with the deployment steps as per the main document.
