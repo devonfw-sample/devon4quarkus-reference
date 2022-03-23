@@ -1,0 +1,20 @@
+== Deployment with Azure SQL DB
+
+=== Pre-requisites
+* Azure CLI is to be installed. For installing, please refer this link:https://docs.microsoft.com/en-us/cli/azure/install-azure-cli[link].
+
+=== Steps
+Here are the high level steps which are followed by Azure CLI Commands.
+
+* Connect to Azure AKS Cluster.
+* Enable the Ingress Controller in the Cluster.
+* Update the Ingress YAML file.
+* Execute/Apply the YAML files and test the application.
+
+```
+#Connect to Azure from CLI (either local machine or VM)
+az login
+
+#Set the Azure Subscription in which Kubernetes Cluster presents
+az account set --subscription <mySubscription>
+```
