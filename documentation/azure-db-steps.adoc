@@ -1,15 +1,16 @@
-== Deployment with Azure SQL DB
+== Using Azure Database for PostgreSQL in place of default PostgreSQL DB
 
 === Pre-requisites
+* Azure Database for PostgreSQL is required to be up and running for this deployment. In case, you need to create new database, please refer this link:https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/postgresql/quickstart-create-server-database-azure-cli.md[link].
 * Azure CLI is to be installed. For installing, please refer this link:https://docs.microsoft.com/en-us/cli/azure/install-azure-cli[link].
 
 === Steps
 Here are the high level steps which are followed by Azure CLI Commands.
 
-* Connect to Azure AKS Cluster.
-* Enable the Ingress Controller in the Cluster.
-* Update the Ingress YAML file.
-* Execute/Apply the YAML files and test the application.
+* Connect to Azure Database for PostgreSQL.
+* Create the database.
+* Update the application.properties file.
+* Continue with the deployment steps.
 
 ```
 #Connect to Azure from CLI (either local machine or VM)
