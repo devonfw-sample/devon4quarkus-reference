@@ -1,7 +1,7 @@
 == Using AWS RDS for PostgreSQL in place of default PostgreSQL DB
 
 === Pre-requisites
-* AWS RDS for PostgreSQL is required to be up and running for this deployment. In case, you need to create new database, please refer link:https://www.mydatahack.com/how-to-launch-postgres-rds-with-aws-command-line-interface-cli/[CLI] or link:https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html[AWS Console].
+* AWS RDS for PostgreSQL is required to be up and running for this deployment. In case, you need to create new database, please refer link:https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html[AWS Console] or link:https://www.mydatahack.com/how-to-launch-postgres-rds-with-aws-command-line-interface-cli/[CLI].
 * AWS CLI is to be installed. For installing, please refer this link:https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html[link].
 
 === Steps
@@ -12,17 +12,20 @@ Here are the high level steps which are followed by AWS CLI Commands.
 * Update the application.properties file and continue with the deployment steps.
 
 ```
-#Connect to Azure from CLI (either local machine or VM)
-az login
+#Connect to AWS from CLI (either local machine or VM) - in case, AWS CLI not present, install 
+aws --version
 
-#Set the Azure Subscription in which Kubernetes Cluster presents
-az account set --subscription <mySubscription>
+#Check if it is connected
+aws sts get-caller-identity
+
+#If connected to AWS, skip this command or else, use this and connect
+aws configure
 
 #Connect to DB using the below format
-psql --host=<dbserver-name>.postgres.database.azure.com --port=5432 --username=<admin-username>@<dbserver-name> --dbname=postgres
+psql --host=<dbserver-name>.<aws-account-id>.<region>.database.azure.com --port=5432 --username=postgres --dbname=postgres
 
 #Sample
-psql --host=d4qdb.postgres.database.azure.com --port=5432 --username=devonadmin@d4qdb --dbname=postgres
+psql --host=d4qdb.11011000110011.eu-west-1.rds.amazonaws.com --port=5432 --username=devonadmin@d4qdb --dbname=postgres
 
 #After logging into psql prompt, create the demo DB to use in our reference project
 CREATE DATABASE demo;
@@ -42,8 +45,8 @@ quarkus.datasource.password=********
 ```
 # Datasource configuration
 quarkus.datasource.db-kind=postgresql
-quarkus.datasource.jdbc.url=jdbc:postgresql://d4qdb.postgres.database.azure.com:5432/demo
-quarkus.datasource.username=devonadmin@d4qdb
+quarkus.datasource.jdbc.url=jdbc:postgresql://d4qdb.11011000110011.eu-west-1.rds.amazonaws.com:5432/demo
+quarkus.datasource.username=postgres
 quarkus.datasource.password=**********
 ```
 
