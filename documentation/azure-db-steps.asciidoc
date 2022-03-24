@@ -46,5 +46,4 @@ quarkus.datasource.jdbc.url=jdbc:postgresql://d4qdb.postgres.database.azure.com:
 quarkus.datasource.username=devonadmin@d4qdb
 quarkus.datasource.password=**********
 ```
-
-* Continue with the deployment steps as per the main document.
+* Continue with the deployment steps as per the link:https://github.com/devonfw-sample/devon4quarkus-reference/#readme[main document].
