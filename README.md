@@ -14,7 +14,7 @@ docker-compose up
 ```
 If you want to use other DB, modify the params in `application.properties`. 
 
-For using Cloud DBs, refer the steps in [AWS DB](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/aws-db-steps.adoc) or [Azure DB](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/azure-db-steps.adoc).
+For using Cloud DBs, refer the steps in [AWS DB](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/aws-db-steps.asciidoc) or [Azure DB](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/azure-db-steps.asciidoc).
 
 To access Jaeger UI(tracing): http://localhost:16686  
 To access Prometheus(metrics): http://localhost:9090/graph
@@ -103,8 +103,8 @@ kubectl apply -f k8s/ingress.yaml
 
 Give it a few moments and then open http://demo-quarkus.localhost/products/ in your browser.
 
-- For deploying in **AWS** EKS Cluster, refer this [link](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/aws-k8s-steps.adoc).
-- For deploying in **Azure** AKS Cluster, refer this [link](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/azure-k8s-steps.adoc).
+- For deploying in **AWS** EKS Cluster, refer this [link](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/aws-k8s-steps.asciidoc).
+- For deploying in **Azure** AKS Cluster, refer this [link](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/azure-k8s-steps.asciidoc).
 
 ## Helm
 
