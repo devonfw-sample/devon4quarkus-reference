@@ -12,7 +12,9 @@ You can start the DB and Jaeger containers using simple cmd:
 ```
 docker-compose up
 ```
-If you want to use other DB, modify the params in `application.properties`
+If you want to use other DB, modify the params in `application.properties`. 
+
+For using Cloud DBs, refer the steps in [AWS DB](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/aws-db-steps.adoc) or [Azure DB](https://github.com/devonfw-sample/devon4quarkus-reference/blob/master/documentation/azure-db-steps.adoc).
 
 To access Jaeger UI(tracing): http://localhost:16686  
 To access Prometheus(metrics): http://localhost:9090/graph
