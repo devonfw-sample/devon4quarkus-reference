@@ -22,10 +22,10 @@ aws sts get-caller-identity
 aws configure
 
 #Connect to DB using the below format
-psql --host=<dbserver-name>.<aws-account-id>.<region>.database.azure.com --port=5432 --username=postgres --dbname=postgres
+psql --host=<dbserver-name>.<aws-account-id>.<region>.rds.amazonaws.com --port=5432 --username=postgres --dbname=postgres
 
 #Sample
-psql --host=d4qdb.11011000110011.eu-west-1.rds.amazonaws.com --port=5432 --username=devonadmin@d4qdb --dbname=postgres
+psql --host=d4qdb.11011000110011.eu-west-1.rds.amazonaws.com --port=5432 --username=postgres --dbname=postgres
 
 #After logging into psql prompt, create the demo DB to use in our reference project
 CREATE DATABASE demo;
