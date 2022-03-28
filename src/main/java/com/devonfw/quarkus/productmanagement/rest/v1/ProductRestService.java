@@ -6,6 +6,8 @@ import static javax.ws.rs.core.Response.status;
 
 import java.util.Optional;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -25,6 +27,7 @@ import javax.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.springframework.data.domain.Page;
 
+import com.devonfw.quarkus.general.rest.security.ApplicationAccessControlConfig;
 import com.devonfw.quarkus.productmanagement.domain.model.ProductEntity;
 import com.devonfw.quarkus.productmanagement.domain.repo.ProductRepository;
 import com.devonfw.quarkus.productmanagement.rest.v1.mapper.ProductMapper;
@@ -46,6 +49,7 @@ public class ProductRestService {
   UriInfo uriInfo;
 
   @GET
+  @PermitAll
   public Page<ProductDto> getAllOrderedByTitle() {
 
     Page<ProductEntity> products = this.productRepository.findAllByOrderByTitle();
@@ -56,6 +60,7 @@ public class ProductRestService {
   }
 
   @POST
+  @RolesAllowed(ApplicationAccessControlConfig.PERMISSION_SAVE_PRODUCT)
   public Response createNewProduct(ProductDto product) {
 
     if (isEmpty(product.getTitle())) {
@@ -80,6 +85,7 @@ public class ProductRestService {
   }
 
   @GET
+  @PermitAll
   @Path("{id}")
   public ProductDto getProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
 
@@ -91,6 +97,7 @@ public class ProductRestService {
   }
 
   @GET
+  @PermitAll
   @Path("title/{title}")
   public ProductDto getProductByTitle(@PathParam("title") String title) {
 
@@ -98,6 +105,7 @@ public class ProductRestService {
   }
 
   @DELETE
+  @RolesAllowed(ApplicationAccessControlConfig.PERMISSION_DELETE_PRODUCT)
   @Path("{id}")
   public Response deleteProductById(@Parameter(description = "Product unique id") @PathParam("id") String id) {
 
